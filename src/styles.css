@@ -5365,3 +5365,39 @@ h3 {
     height: 28px;
   }
 }
+
+/* One plain legal footer across member and signed-out pages. */
+.main {
+  min-height: calc(100dvh - 49px);
+}
+.site-footer {
+  margin-left: 200px;
+  min-height: 49px;
+  padding: 15px 32px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+  color: #666;
+  font:
+    11px Arial,
+    Helvetica,
+    sans-serif;
+}
+.site-footer.wide {
+  margin-left: 56px;
+}
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+.site-footer a:hover {
+  color: #167ac6;
+  text-decoration: underline;
+}
+@media (max-width: 800px) {
+  .site-footer,
+  .site-footer.wide {
+    margin-left: 0;
+    padding: 15px 17px;
+  }
+}

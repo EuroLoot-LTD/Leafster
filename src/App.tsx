@@ -602,16 +602,6 @@ export default function App() {
             </div>
           ))}
         </nav>
-        <div className="sidebar-bottom">
-          <p>Leafster · A EuroLoot project</p>
-          <div>
-            <Link to="/policies/privacy">Privacy</Link>
-            <Link to="/policies/terms">Terms</Link>
-            <Link to="/policies/safety">Safety</Link>
-            <Link to="/notices">Report illegal content</Link>
-          </div>
-          <p className="staging-footnote">Restricted development staging</p>
-        </div>
       </aside>
       <main
         id="main"
@@ -673,6 +663,14 @@ export default function App() {
           </Routes>
         )}
       </main>
+      <footer className={`site-footer ${collapsed ? "wide" : ""}`}>
+        <nav aria-label="Legal">
+          <Link to="/policies/privacy">Privacy</Link>
+          <Link to="/policies/terms">Terms</Link>
+          <Link to="/policies/safety">Safety</Link>
+          <Link to="/notices">Copyright &amp; reporting</Link>
+        </nav>
+      </footer>
       {notice && (
         <div className="toast" role="status">
           {notice}
@@ -756,12 +754,6 @@ function SignInGate() {
             </p>
           )}
         </section>
-        <div className="signed-out-links">
-          <Link to="/policies/privacy">Privacy</Link>
-          <Link to="/policies/terms">Terms</Link>
-          <Link to="/policies/safety">Safety</Link>
-          <Link to="/notices">Report illegal content</Link>
-        </div>
       </div>
     </div>
   );
@@ -1143,13 +1135,6 @@ function Feed({ kind = "home" }: { kind?: string }) {
           <p className="feed-criteria">{data.feedInfo.criteria}</p>
         )}
       </div>
-      <footer className="feed-footer">
-        <span>Leafster · A EuroLoot project</span>
-        <Link to="/policies/terms">Terms</Link>
-        <Link to="/policies/privacy">Privacy</Link>
-        <Link to="/policies/safety">Safety</Link>
-        <Link to="/notices">Report illegal content</Link>
-      </footer>
     </div>
   );
 }
@@ -4135,10 +4120,9 @@ function Policies() {
         <>
           <h2>Who operates this service</h2>
           <p>
-            Leafster is a EuroLoot project. The legal controller’s identity,
-            contact address, retention schedule, and processor arrangements must
-            be confirmed before public launch. No incorporated or nonprofit
-            status is asserted.
+            The legal controller’s identity, contact address, retention
+            schedule, and processor arrangements must be confirmed before public
+            launch. No incorporated or nonprofit status is asserted.
           </p>
           <h2>Information used</h2>
           <p>
@@ -4226,12 +4210,6 @@ function Policies() {
           </p>
         </>
       )}
-      <div className="policy-links">
-        <Link to="/policies/privacy">Privacy</Link>
-        <Link to="/policies/terms">Terms</Link>
-        <Link to="/policies/safety">Safety</Link>
-        <Link to="/notices">Report illegal content</Link>
-      </div>
     </article>
   );
 }
@@ -4394,10 +4372,6 @@ function LegalNotice() {
           </div>
         </form>
       )}
-      <div className="policy-links">
-        <Link to="/policies/privacy">Privacy notice</Link>
-        <Link to="/policies/terms">Draft terms</Link>
-      </div>
     </section>
   );
 }
