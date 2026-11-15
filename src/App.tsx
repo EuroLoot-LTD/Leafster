@@ -313,7 +313,7 @@ export default function App() {
     [accountOpen, setAccountOpen] = useState(false),
     [notifications, setNotifications] = useState(false);
   const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 1200px)").matches,
+    () => window.matchMedia("(max-width: 800px)").matches,
   );
   const token = useRef("");
   const location = useLocation(),
@@ -323,7 +323,7 @@ export default function App() {
     /^\/(?:trending|search)\/?$/.test(location.pathname) ||
     /^\/(?:watch|channel)\/[^/]+\/?$/.test(location.pathname);
   useEffect(() => {
-    const query = window.matchMedia("(max-width: 1200px)");
+    const query = window.matchMedia("(max-width: 800px)");
     const change = () => {
       setIsMobile(query.matches);
       setMobileNav(false);

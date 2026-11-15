@@ -61,4 +61,4 @@ Leafster · A EuroLoot project. This attribution makes no claim about incorporat
 
 Run `npm run build:pages` to prepare static assets in `dist-pages/`, with the correct `/Leafster/` project base and hash routes. It intentionally reports that the application server is not connected; it is not a working Google login or video backend. See [Pages readiness](docs/PAGES-READINESS.md). The compiled-assets-only `gh-pages` branch was pushed to the private EuroLoot repository. GitHub rejected activation with HTTP422 because this private organisation repository is on the Free plan. No visibility or paid-plan change was made.
 
-The interface defaults to 150% site magnification at 100% browser zoom. Responsive breakpoints and viewport height limits account for that scale. Browser zoom remains separately adjustable.
+The interface uses normal CSS sizing and honours the browser’s native zoom. No extra CSS magnification is applied, so browser140% or150% does not stack with a second site multiplier.

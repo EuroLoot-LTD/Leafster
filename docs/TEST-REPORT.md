@@ -62,3 +62,7 @@ The private compiled-only gh-pages branch was pushed. An authorised Pages activa
 The 20-test suite passed under the updated public-viewing policy. A genuinely transcoded H.264 clip was also played while signed out in the browser (readyState4, duration18seconds, paused=false, no media error). Like opened the sign-in dialog. Private media, publishing, community feeds and personal tools remain protected.
 
 Root CSS zoom is1.5. At a1280px browser viewport, the header measured75px and the sidebar300px, with no document overflow. Responsive breakpoints and JavaScript navigation checks were scaled consistently; viewport-height limits were divided by1.5. Narrow390px checks found no horizontal overflow after wrapping the feed controls. Both application and Pages builds passed. The static public-video screen no longer asks visitors to sign in to watch, and clearly states that the hosted video service still needs to be connected.
+
+## Browser zoom stacking correction
+
+The owner supplied two screenshots showing native browser150% versus native150% multiplied by the site’s1.5 CSSzoom. The site-level multiplier was removed; original breakpoints,800px navigation checks, viewport height calculations and mobile logo sizing were restored. Native browser zoom is now the only magnification layer, matching the first screenshot rather than225% combined scaling. Current public-video access and the plain legal footer were preserved.
