@@ -5436,6 +5436,9 @@ html {
 }
 @media (max-width: 870px) {
   .wordmark > img {
-    width: 92px;
+    width: 82px;
+  }
+  .header-actions .create-button {
+    display: none;
   }
 }
