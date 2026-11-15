@@ -405,6 +405,32 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
     maxBytes: 500 * 1024 * 1024,
     maxUploadBytes: 100 * 1024 * 1024,
   });
+  // Browsing and media require an approved, completed profile. Legal notices
+  // remain available to non-account holders through their anonymous CSRF session.
+  const publicApiPaths = new Set([
+    "/api/health",
+    "/api/session",
+    "/api/auth/google",
+    "/api/auth/callback",
+    "/api/auth/logout",
+    "/api/onboarding",
+    "/api/legal/notices",
+    // The handler exists only inside an explicitly isolated test process.
+    "/api/test/login",
+  ]);
+  app.use((req: any, _res, next) => {
+    if (
+      !req.path.toLowerCase().startsWith("/api/") ||
+      publicApiPaths.has(req.path)
+    )
+      return next();
+    try {
+      auth(req);
+      next();
+    } catch (error) {
+      next(error);
+    }
+  });
   const googleConfigured = !!(
     process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
   );
@@ -952,11 +978,9 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
           vid,
           now(),
         );
-        res
-          .status(202)
-          .json({
-            video: videoShape(get("SELECT * FROM videos WHERE id=?", vid), req),
-          });
+        res.status(202).json({
+          video: videoShape(get("SELECT * FROM videos WHERE id=?", vid), req),
+        });
         setImmediate(worker);
       } catch (e) {
         safeUnlink(file.path);
@@ -1107,11 +1131,9 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
         body,
         now(),
       );
-      res
-        .status(201)
-        .json({
-          comment: commentShape(get("SELECT * FROM comments WHERE id=?", cid)),
-        });
+      res.status(201).json({
+        comment: commentShape(get("SELECT * FROM comments WHERE id=?", cid)),
+      });
     }),
   );
   app.patch(
@@ -1377,13 +1399,9 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
         vis,
         now(),
       );
-      res
-        .status(201)
-        .json({
-          playlist: playlistShape(
-            get("SELECT * FROM playlists WHERE id=?", pid),
-          ),
-        });
+      res.status(201).json({
+        playlist: playlistShape(get("SELECT * FROM playlists WHERE id=?", pid)),
+      });
     }),
   );
   app.get(
@@ -1523,11 +1541,9 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
         parent?.id || null,
         now(),
       );
-      res
-        .status(201)
-        .json({
-          leaf: leafShape(get("SELECT * FROM leaves WHERE id=?", lid), req),
-        });
+      res.status(201).json({
+        leaf: leafShape(get("SELECT * FROM leaves WHERE id=?", lid), req),
+      });
     }),
   );
   app.patch(
@@ -1665,11 +1681,9 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
           now(),
           expires,
         );
-        res
-          .status(201)
-          .json({
-            story: storyShape(get("SELECT * FROM stories WHERE id=?", sid)),
-          });
+        res.status(201).json({
+          story: storyShape(get("SELECT * FROM stories WHERE id=?", sid)),
+        });
       } catch (e) {
         safeUnlink(dest);
         throw e;
@@ -1803,12 +1817,10 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
         "pending",
         now(),
       );
-      res
-        .status(201)
-        .json({
-          id: rid,
-          message: "Notice recorded in the confidential operator review queue.",
-        });
+      res.status(201).json({
+        id: rid,
+        message: "Notice recorded in the confidential operator review queue.",
+      });
     }),
   );
   app.get(
@@ -2393,18 +2405,16 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
           : err.status || (/UNIQUE constraint/.test(err.message) ? 409 : 500);
     if (status === 500 && process.env.NODE_ENV !== "test")
       console.error("[leafster] Request failed:", err.name);
-    res
-      .status(status)
-      .json({
-        error:
-          status === 500
-            ? "Something went wrong. Please try again."
-            : err.code === "LIMIT_FILE_SIZE"
-              ? "Files are limited to 100 MB."
-              : /UNIQUE constraint/.test(err.message)
-                ? "This item already exists."
-                : err.message,
-      });
+    res.status(status).json({
+      error:
+        status === 500
+          ? "Something went wrong. Please try again."
+          : err.code === "LIMIT_FILE_SIZE"
+            ? "Files are limited to 100 MB."
+            : /UNIQUE constraint/.test(err.message)
+              ? "This item already exists."
+              : err.message,
+    });
   });
   return {
     app,

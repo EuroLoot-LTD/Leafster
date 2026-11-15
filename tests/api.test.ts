@@ -92,7 +92,8 @@ test("real local video pipeline, authorisation, social persistence and account l
   assert.ok(watched.playbackUrl);
   const search = await b.get("/api/videos?q=Original&sort=oldest").expect(200);
   assert.equal(search.body.videos.length, 1);
-  await anon
+  await anon.get(watched.playbackUrl).expect(401);
+  await b
     .get(watched.playbackUrl)
     .set("range", "bytes=0-63")
     .expect(206)
@@ -224,14 +225,15 @@ test("real local video pipeline, authorisation, social persistence and account l
     .field("caption", "Original development test image")
     .attach("file", image)
     .expect(201);
-  await anon
+  await anon.get(story.body.story.mediaUrl).expect(401);
+  await b
     .get(story.body.story.mediaUrl)
     .expect(200)
     .expect("Content-Type", /image\/jpeg/);
   site.db
     .prepare("UPDATE stories SET expires_at=? WHERE id=?")
     .run(new Date(Date.now() - 1000).toISOString(), story.body.story.id);
-  await anon.get(story.body.story.mediaUrl).expect(404);
+  await b.get(story.body.story.mediaUrl).expect(404);
   assert.equal((await a.get("/api/stories")).body.stories.length, 0);
   const sessions = await a.get("/api/account/sessions").expect(200);
   assert.equal(sessions.body.sessions.length, 1);

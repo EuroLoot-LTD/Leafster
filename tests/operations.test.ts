@@ -101,7 +101,10 @@ test("profiles, secure sessions and Leaves survive a server restart", async () =
       .set("Cookie", cookie)
       .expect(200);
     assert.equal(session.body.user.handle, "restart_tester");
-    const leaves = await supertest(site.app).get("/api/leaves").expect(200);
+    const leaves = await supertest(site.app)
+      .get("/api/leaves")
+      .set("Cookie", cookie)
+      .expect(200);
     assert.equal(
       leaves.body.leaves[0].body,
       "Persistent public update for the restart test.",

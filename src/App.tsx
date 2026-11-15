@@ -59,7 +59,9 @@ import {
   Users,
   Video,
   X,
-} from "lucide-react";
+} from "./icons";
+
+const staticPages = import.meta.env.VITE_HOSTING_TARGET === "github-pages";
 
 type User = {
   id: string;
@@ -371,6 +373,10 @@ export default function App() {
     return response.json();
   }, []);
   const refresh = useCallback(async () => {
+    if (staticPages) {
+      setSessionLoaded(true);
+      return;
+    }
     try {
       const next = await api("/api/session");
       token.current = next.csrfToken;
@@ -469,7 +475,10 @@ export default function App() {
             <Menu size={22} />
           </button>
           <Link className="wordmark" to="/" aria-label="Leafster home">
-            <img src="/brand/leafster-logo.png" alt="Leafster" />
+            <img
+              src={`${import.meta.env.BASE_URL}brand/leafster-logo.png`}
+              alt="Leafster"
+            />
             <span className="stage-label">STAGING</span>
           </Link>
         </div>
@@ -576,14 +585,11 @@ export default function App() {
                   to={path}
                   end={path === "/"}
                   className={({ isActive }) =>
-                    `nav-item ${isActive ? "active" : ""}`
+                    `nav-item ${isActive ? "active" : ""} ${!session.user && path !== "/" ? "auth-locked" : ""}`
                   }
                   title={collapsed ? label : undefined}
                   onClick={(e) => {
-                    if (
-                      ["Your Channel", "Creator Studio"].includes(label) &&
-                      !session.user
-                    ) {
+                    if (!session.user && path !== "/") {
                       e.preventDefault();
                       setSignIn(true);
                     }
@@ -614,6 +620,15 @@ export default function App() {
       >
         {!sessionLoaded ? (
           <Loading />
+        ) : !session.user &&
+          !location.pathname.startsWith("/policies/") &&
+          location.pathname !== "/notices" ? (
+          <SignInGate />
+        ) : session.user &&
+          !session.user.onboarded &&
+          !location.pathname.startsWith("/policies/") &&
+          !["/notices", "/onboarding"].includes(location.pathname) ? (
+          <ProfileGate />
         ) : (
           <Routes>
             <Route path="/" element={<Feed />} />
@@ -686,8 +701,9 @@ export default function App() {
                   <span className="google-g">G</span>Continue with Google
                 </button>
                 <p className="form-note">
-                  Google Sign-In is awaiting the project’s OAuth credentials.
-                  Account creation is unavailable until it is configured.
+                  {staticPages
+                    ? "This static website has no connected application server. Google Sign-In will become available after the secure Leafster server and OAuth client are configured."
+                    : "Google Sign-In is awaiting the project’s OAuth credentials. Account creation is unavailable until it is configured."}
                 </p>
               </>
             )}
@@ -720,14 +736,64 @@ export default function App() {
   );
 }
 
+function SignInGate() {
+  const { signIn } = useApp();
+  return (
+    <div className="feed-page">
+      <div className="feed-board signed-out-board">
+        <section className="plain-feed-empty">
+          <h1>Sign in to Leafster</h1>
+          <p>
+            Sign in to watch videos, explore channels, and join the community.
+          </p>
+          <button className="button primary" onClick={signIn}>
+            Sign in
+          </button>
+          {staticPages && (
+            <p className="server-status">
+              Application server not connected. Sign-in and member features are
+              unavailable.
+            </p>
+          )}
+        </section>
+        <div className="signed-out-links">
+          <Link to="/policies/privacy">Privacy</Link>
+          <Link to="/policies/terms">Terms</Link>
+          <Link to="/policies/safety">Safety</Link>
+          <Link to="/notices">Report illegal content</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileGate() {
+  return (
+    <div className="feed-page">
+      <div className="feed-board">
+        <section className="plain-feed-empty">
+          <h1>Complete your channel</h1>
+          <p>
+            Choose your handle and complete the approved tester profile to
+            continue.
+          </p>
+          <Link className="button primary" to="/onboarding">
+            Complete profile
+          </Link>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function SearchBar() {
   const [value, setValue] = useState(""),
     [suggest, setSuggest] = useState<string[]>([]);
   const navigate = useNavigate();
-  const { api } = useApp();
+  const { api, session, signIn } = useApp();
   useEffect(() => {
     setSuggest([]);
-    if (value.trim().length < 2) return;
+    if (!session.user || value.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       api(`/api/videos?q=${encodeURIComponent(value)}`, {
@@ -743,8 +809,12 @@ function SearchBar() {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [value, api]);
+  }, [value, api, session.user]);
   const submit = (text = value) => {
+    if (!session.user) {
+      signIn();
+      return;
+    }
     if (!text.trim()) return;
     navigate(`/search?q=${encodeURIComponent(text.trim())}`);
     setSuggest([]);
@@ -761,7 +831,10 @@ function SearchBar() {
       <div className="search-input-wrap">
         <input
           aria-label="Search Leafster"
-          placeholder="Search videos and creators"
+          placeholder={
+            session.user ? "Search videos and creators" : "Sign in to search"
+          }
+          disabled={!session.user}
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -793,7 +866,11 @@ function SearchBar() {
           </div>
         )}
       </div>
-      <button aria-label="Search" className="search-submit">
+      <button
+        aria-label="Search"
+        className="search-submit"
+        disabled={!session.user}
+      >
         <Search size={20} />
       </button>
     </form>
@@ -4169,6 +4246,23 @@ function LegalNotice() {
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [receipt, setReceipt] = useState("");
+  if (staticPages)
+    return (
+      <section className="page public-notice-form">
+        <h1>Report illegal content</h1>
+        <p>
+          The reporting service is not connected on this static website. No
+          notice can be submitted here until Leafster’s application server is
+          configured.
+        </p>
+        <p>
+          This deployment does not host member uploads or public interactions.
+        </p>
+        <Link className="text-button" to="/policies/safety">
+          Safety information
+        </Link>
+      </section>
+    );
   return (
     <section className="page public-notice-form">
       <p className="eyebrow">CONFIDENTIAL OPERATOR REVIEW</p>

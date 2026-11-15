@@ -24,7 +24,7 @@ The compiled application serves on loopback port 3001. For single-origin local b
 
 ## Working foundation
 
-- White/orange responsive interface with the existing Leafster logo, compact navigation, search and distinct feed choices.
+- White/orange classic interface with the existing Leafster logo, square corners and avatars, licensed 2016 filled icons, compact navigation, search and distinct feed choices.
 - Server-side Google OIDC implementation, invitation allowlist, unique handles/channels, hashed sessions, CSRF protection and server-enforced roles.
 - Real private video upload, signature/probe validation, duplicate detection, bounded FFmpeg processing, thumbnails, MP4 playback/byte ranges and creator publishing controls.
 - Persistent subscriptions, reactions, public comments/replies, watch progress, private/public collections, text Leaves and image/short-video Stories.
@@ -36,7 +36,7 @@ The implementation is a single-host pilot using React, TypeScript, Express, SQLi
 
 Production builds and isolated API/security tests pass. Browser QA exercised actual local screens and decoded media playback; the detailed report distinguishes API upload testing from the browser extension's blocked file picker.
 
-The private repository is [EuroLoot-LTD/Leafster](https://github.com/EuroLoot-LTD/Leafster). No hosted deployment is claimed. The visible cloud accounts were unrelated to EuroLoot and were not changed. Live Google sign-in requires project credentials. Public registration stays closed pending age-assurance, legal, security and moderation readiness. No paid service, domain, payment collection or public source release was enabled.
+The private repository is [EuroLoot-LTD/Leafster](https://github.com/EuroLoot-LTD/Leafster). Member content, discovery, channels, search, media and community features require an approved completed account; privacy/terms/safety and confidential reporting remain public. No hosted deployment is claimed. The visible cloud accounts were unrelated to EuroLoot and were not changed. Live Google sign-in requires project credentials. Google Cloud access is currently blocked by the account owner’s verification challenge. Public registration stays closed pending age-assurance, legal, security and moderation readiness. No paid service, domain, payment collection or public source release was enabled.
 
 ## Read before operating
 
@@ -56,3 +56,7 @@ The private repository is [EuroLoot-LTD/Leafster](https://github.com/EuroLoot-LT
 No default administrator or public password login exists. The isolated test route is available only when both NODE_ENV=test and LEAFSTER_TEST_AUTH=true; production rejects that flag. Do not expose test servers or publish their fixture accounts. Original media fixtures and browser test databases are outside this repository.
 
 Leafster · A EuroLoot project. This attribution makes no claim about incorporation or nonprofit registration.
+
+## GitHub Pages build
+
+Run `npm run build:pages` to prepare static assets in `dist-pages/`, with the correct `/Leafster/` project base and hash routes. It intentionally reports that the application server is not connected; it is not a working Google login or video backend. See [Pages readiness](docs/PAGES-READINESS.md). The compiled-assets-only `gh-pages` branch was pushed to the private EuroLoot repository. GitHub rejected activation with HTTP422 because this private organisation repository is on the Free plan. No visibility or paid-plan change was made.

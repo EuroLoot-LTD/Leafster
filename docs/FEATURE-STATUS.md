@@ -9,7 +9,7 @@ Snapshot: 15 November 2026. This is a substantial **local development implementa
 - **Absent / blocked** means unavailable and must not be presented as a working feature.
 - **API verified** refers to actual automated HTTP tests. **UI present** means source inspection found the interface; browser verification must be reported separately.
 
-The reviewed automated suite contains 18 passing tests: two backend integration/environment tests, one discovery/feed test, three operational lifecycle/notice checks and twelve independent security tests. A complete `npm test` run passed all 18 during this review. Its broad integration test generates actual media with FFmpeg and uses an isolated test-only identity endpoint. These fixtures are not Google authentication and never populate the normal catalogue. Security tests use some directly seeded records to isolate access-control cases. No test count should be read as exhaustive browser, load or adversarial assurance.
+The latest automated suite contains 20 passing tests, including two additional member-access policy regressions. A complete `npm test` run passed all 20. Its broad integration test generates actual media with FFmpeg and uses an isolated test-only identity endpoint. These fixtures are not Google authentication and never populate the normal catalogue. Security tests use some directly seeded records to isolate access-control cases. No test count should be read as exhaustive browser, load or adversarial assurance.
 
 ## Foundation, brand and navigation
 
@@ -30,7 +30,7 @@ The reviewed automated suite contains 18 passing tests: two backend integration/
 | --- | --- | --- |
 | Google authentication | Official library; code exchange, PKCE, state, nonce and ID-token validation | Implemented but blocked by real EuroLoot OAuth credentials/configuration; no live provider test |
 | Minimal login grant | openid/email/profile only; no Google password form/storage or YouTube grant | Code inspected; actual consent screen not verified |
-| Closed registration | Approved email allowlist and adult-staging declaration; Google sessions revoked when removed from allowlist | Local gating; declaration is not age assurance; host must also restrict anonymous viewing |
+| Closed registration | Approved email allowlist and adult-staging declaration; Google sessions revoked when removed from allowlist | Local gating; declaration is not age assurance; all member content and direct media now require sign-in |
 | Account creation/channel | Unique handle and display name; channel created transactionally | API verified using test-only identities |
 | Avatar/profile branding | Basic Google avatar import and channel identity | Partial; custom avatar/banner upload and extensive appearance controls absent |
 | Channel page | Video/Leaves/Stories/About views, name/description/links, stored subscriber counts | Local + UI present; public channel playlist discovery is not implemented |
@@ -145,6 +145,10 @@ The reviewed automated suite contains 18 passing tests: two backend integration/
 
 ## Important unresolved limits
 
-The public catalogue must remain genuinely empty until creators publish real content. This build must remain local or behind an approved whole-origin staging gate. Account allowlisting does not alone restrict anonymous browsing of public pages/media. No production host was provisioned, no payment was enabled, and no guarantee of unlimited free video delivery is made.
+The public catalogue must remain genuinely empty until creators publish real content. This build must remain local or behind an approved whole-origin staging gate. Member content and media are unavailable to signed-out visitors; policies and confidential notices remain public. No production host was provisioned, no payment was enabled, and no guarantee of unlimited free video delivery is made.
 
 SQLite/private disk and one process are an intentional working pilot architecture, not a distributed production platform. Production requires persistent approved infrastructure, resource isolation, remote backups, monitored safety/legal processes, tested age policy and actual Google/browser end-to-end verification. See `ARCHITECTURE.md`, `DEPLOYMENT.md`, `PRIVACY-AND-SAFETY.md` and `INFRASTRUCTURE-COSTS.md`.
+
+## Latest owner-requested revision
+
+All interface corners and profile images are square; browser DOM inspection found zero elements with a nonzero corner radius. Lucide was removed in favour of explicitly licensed 2016 filled icons. Search and community/content routes are unavailable until approved sign-in/profile completion, with server-side enforcement for direct media and case variants. Google Cloud is blocked by the owner’s verification challenge. Static Pages assets were prepared and pushed to a private gh-pages branch; activation was rejected by GitHub’s plan check, HTTP422. There is no verified live Pages URL.

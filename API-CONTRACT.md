@@ -1,4 +1,8 @@
 # Leafster local API contract
+
+**Current access policy:** A completed, approved signed-in adult staging profile is required for all community and content endpoints, including catalogue search, channel pages, Leaves, Stories, public collections, thumbnails, and direct playback URLs. Signed-out requests return401; signed-in accounts awaiting onboarding return403. A video marked `public` is discoverable to eligible signed-in members under this access policy. Account controls retain their ownership and moderator checks.
+
+Only health, session bootstrap, official Google authentication, sign-out, onboarding, and confidential legal notice submission remain reachable without a completed profile; onboarding itself requires sign-in. Privacy, terms, safety pages and static interface assets remain accessible. Legal notices from non-account holders require an anonymous CSRF session. The test-login handler exists only in an explicitly isolated test process and is absent from normal operation.
 All responses JSON, failures `{error:string}`. All unsafe methods require same origin and `x-csrf-token` from GET /api/session. Cookies sent same origin. JSON request unless specified. Dates ISO.
 
 - GET /api/session -> {user:null|{id,name,handle,avatar,role,onboarded},csrfToken,googleConfigured,registrationOpen:false}

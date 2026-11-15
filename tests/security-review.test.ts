@@ -129,7 +129,7 @@ test("media ownership, range serving and visibility changes use private no-store
     b = await f.login("viewer"),
     v = f.video(a.channelId, "private");
   await b.agent.get(`/api/videos/${v.id}`).expect(404);
-  await request(f.app).get(`/api/media/${v.id}/video`).expect(404);
+  await request(f.app).get(`/api/media/${v.id}/video`).expect(401);
   assert.match(
     (await a.agent.get(`/api/media/${v.id}/video`).expect(200)).headers[
       "cache-control"
@@ -229,7 +229,7 @@ test("expired stories cannot be read through a retained media URL", async (t) =>
       new Date(Date.now() + 60000).toISOString(),
     );
   assert.match(
-    (await request(f.app).get(`/api/story-media/${id}`).expect(200)).headers[
+    (await a.agent.get(`/api/story-media/${id}`).expect(200)).headers[
       "cache-control"
     ],
     /no-store/,
@@ -237,9 +237,9 @@ test("expired stories cannot be read through a retained media URL", async (t) =>
   f.db
     .prepare("UPDATE stories SET expires_at=? WHERE id=?")
     .run(new Date(Date.now() - 1000).toISOString(), id);
-  await request(f.app).get(`/api/story-media/${id}`).expect(404);
+  await a.agent.get(`/api/story-media/${id}`).expect(404);
   assert.equal(
-    (await request(f.app).get("/api/stories").expect(200)).body.stories.some(
+    (await a.agent.get("/api/stories").expect(200)).body.stories.some(
       (s: any) => s.id === id,
     ),
     false,

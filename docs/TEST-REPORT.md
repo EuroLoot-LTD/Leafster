@@ -48,3 +48,11 @@ Actual Google consent/callback/allowlisted login; final cloud deployment/TLS/dom
 ## Design revision
 
 The owner supplied a more specific historical screenshot during verification and rejected the first interface as too modern. The final frontend was aligned to that supplied reference: compact header/rail, grey page canvas, centred white shelves and smaller blue-link video cards, using original Leafster branding. [Desktop evidence](screenshots/desktop-reference-revision.jpg) and [mobile evidence](screenshots/mobile-reference-revision.jpg) show the revised interface using one real generated clip in isolated QA data. The normal catalogue remains empty. No screenshot or media from YouTube is included as application content.
+
+## Follow-up verification: member access, vintage icons and square UI
+
+The latest complete suite passed **20/20 tests** after enforcing sign-in for content/discovery/community/media. Previous anonymous media playback observations above describe the earlier policy, not the current one. New tests cover signed-out routes, anonymous-cookie attempts, direct media, URL case and trailing-slash variants, incomplete profiles and logout. Anonymous confidential legal notices remain permitted.
+
+Both the full-stack production build and static Pages build passed. Browser checks verified the signed-out gate and disabled search, then the actual member interface with isolated fixture identity. Computed styles reported avatar radius `0px` and **zero rounded DOM elements**. [Latest square interface](screenshots/classic-square-interface.jpg). The Pages build was tested at `/Leafster/` with hash-route policy navigation and reload. It truthfully reports no application server and does not simulate a session or Google authentication.
+
+The private compiled-only gh-pages branch was pushed. An authorised Pages activation request was rejected with HTTP422: “Your current plan does not support GitHub Pages for this repository.” No paid upgrade or repository visibility change followed. Live Google authentication is blocked by the account owner’s Google verification challenge; no attempt was made to bypass it.

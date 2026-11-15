@@ -4,7 +4,7 @@
 
 The requested EuroLoot-LTD organisation exists. The local GitHub CLI reports active administrator membership, and `EuroLoot-LTD/Leafster` was created and verified private. The GitHub connector itself exposes only the personal installation; CLI authorisation was used to create the organisation repository. No personal repository was created.
 
-The visible Vercel team is personal and the visible Supabase organisation is Rook with unrelated projects. They were inspected read-only and not modified. No verified EuroLoot cloud host or Google OAuth web-client credentials were available. No hosted URL, remote database, bucket, OAuth consent change, paid plan, domain purchase, public registration or live deployment is claimed.
+The visible Vercel team is personal and the visible Supabase organisation is Rook with unrelated projects. They were inspected read-only and not modified. No verified EuroLoot cloud host or Google OAuth web-client credentials were available. No hosted URL, remote database, bucket, OAuth consent change, paid plan, domain purchase, public registration or live deployment is claimed. A later Pages activation attempt from a compiled-assets-only private gh-pages branch was explicitly rejected by GitHub with HTTP422 because of the current plan; see PAGES-READINESS.md.
 
 ## Locally reproduce
 
@@ -36,7 +36,7 @@ Choose a EuroLoot-authorised persistent host with an EU data location, signed pr
 
 Provision bounded persistent disk for `LEAFSTER_DATA_DIR`; run as a dedicated non-root user. Supply maintained external executables with `FFMPEG_PATH` and `FFPROBE_PATH`; development binary packages are omitted by production dependency installation. Set NODE_ENV=production, HTTPS APP_ORIGIN, HOST only as needed behind the approved proxy, and LEAFSTER_TEST_AUTH=false (or omit). Use `npm ci`, `npm run build`, then production dependencies and `npm start`. Source/binary redistribution must undergo THIRD-PARTY.md review before publishing any container image. A Docker image was not published.
 
-Restrict the origin in hosting controls; application allowlisting gates account creation, not anonymous browsing of public content. Configure TLS, secure secret injection, process restarts, upload/body timeouts, request and disk limits, resource isolation for FFmpeg, daily backups and restore testing. The current local worker is not a hostile-file sandbox. A single-process pilot must not be horizontally replicated or deployed on ephemeral disk.
+Restrict the origin in hosting controls; application allowlisting now protects all member content and media, while policies and legal notices remain public. Configure TLS, secure secret injection, process restarts, upload/body timeouts, request and disk limits, resource isolation for FFmpeg, daily backups and restore testing. The current local worker is not a hostile-file sandbox. A single-process pilot must not be horizontally replicated or deployed on ephemeral disk.
 
 ## Moderator bootstrap
 
