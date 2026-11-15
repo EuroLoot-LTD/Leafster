@@ -44,7 +44,7 @@ No public request can set role. Once an approved user has signed in, an operator
 
 ## Release checks
 
-Run locked installation, TypeScript/build, isolated API tests, media validation and browser QA; inspect actual deployment health, protected-origin access, Google callback, upload/processing/byte-range seeking, private media denial, moderation removal and Story expiry on the final environment. Verify account export/deletion and backup policy. Review provider quotas and hard-spend limits. Save the tested commit, protect the release branch and retain a tested rollback/restore plan. CI validates source; no CI job auto-deploys or exposes registration.
+Run locked installation, TypeScript/build, isolated API tests, media validation and browser QA; inspect actual deployment health, protected-origin access, Google callback, upload/processing/byte-range seeking, private media denial, moderation removal and Story expiry on the final environment. Verify account export/deletion and backup policy. Review provider quotas and hard-spend limits. Save the tested commit, protect the release branch and retain a tested rollback/restore plan. The supplied validation workflow is manual-dispatch only until EuroLoot confirms its hosted-compute allowance and budget. No hosted Actions run, auto-deploy or public registration is enabled by a push. Local checks run normally.
 
 ## Troubleshooting
 

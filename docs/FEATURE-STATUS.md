@@ -1,6 +1,6 @@
 # Feature implementation and verification status
 
-Snapshot: 15 November 2026. This is a substantial **local development implementation**, not a production-ready public platform. No hosted URL or live Google sign-in is verified. Source is proprietary; the owner reports the requested EuroLoot repository was created private. Consult the final test report and verified repository state for the release commit.
+Snapshot: 15 November 2026. This is a substantial **local development implementation**, not a production-ready public platform. No hosted URL or live Google sign-in is verified. Source is proprietary; the requested EuroLoot repository was created and its private visibility verified. Consult the final test report and verified repository state for the release commit.
 
 ## Reading the matrix
 
@@ -9,7 +9,7 @@ Snapshot: 15 November 2026. This is a substantial **local development implementa
 - **Absent / blocked** means unavailable and must not be presented as a working feature.
 - **API verified** refers to actual automated HTTP tests. **UI present** means source inspection found the interface; browser verification must be reported separately.
 
-The currently reviewed automated suite contains 15 passing tests: two backend integration/environment tests, one discovery/feed test and twelve independent security tests. A complete `npm test` run passed all 15 during this review. Its broad integration test generates actual media with FFmpeg and uses an isolated test-only identity endpoint. These fixtures are not Google authentication and never populate the normal catalogue. Security tests use some directly seeded records to isolate access-control cases. No test count should be read as exhaustive browser, load or adversarial assurance.
+The reviewed automated suite contains 18 passing tests: two backend integration/environment tests, one discovery/feed test, three operational lifecycle/notice checks and twelve independent security tests. A complete `npm test` run passed all 18 during this review. Its broad integration test generates actual media with FFmpeg and uses an isolated test-only identity endpoint. These fixtures are not Google authentication and never populate the normal catalogue. Security tests use some directly seeded records to isolate access-control cases. No test count should be read as exhaustive browser, load or adversarial assurance.
 
 ## Foundation, brand and navigation
 
@@ -19,7 +19,7 @@ The currently reviewed automated suite contains 15 passing tests: two backend in
 | Official logo and favicon | Owner located official Canva design, exported unchanged logo and derived favicon | Assets integrated; final responsive visual QA belongs in browser report |
 | White/orange light-only design | White/neutrals, #E57D09 accent; no dark-mode switch | UI present |
 | Desktop navigation | Header search, create, notifications, account menu; grouped collapsible sidebar | UI present; all requested main destinations represented |
-| Mobile navigation | Responsive grid/layout and drawer/scrim controls | UI present; final browser/device coverage pending |
+| Mobile navigation | Responsive grid/layout and drawer/scrim controls | Desktop and 390×844 browser checks performed; broader device coverage pending |
 | Accessible interaction | Skip link, named controls, focus styles, modal Escape/focus handling, native media controls | Partial; not a WCAG certification or screen-reader/browser audit |
 | Empty/loading/errors | Honest empty catalogue, loading/error/retry states, form errors | UI present; invalid-media denial API verified |
 | Fake activity | No seeded catalogue, invented creators or fabricated engagement in normal operation | Local data starts empty; isolated tests use labelled fixtures |
@@ -33,7 +33,7 @@ The currently reviewed automated suite contains 15 passing tests: two backend in
 | Closed registration | Approved email allowlist and adult-staging declaration; Google sessions revoked when removed from allowlist | Local gating; declaration is not age assurance; host must also restrict anonymous viewing |
 | Account creation/channel | Unique handle and display name; channel created transactionally | API verified using test-only identities |
 | Avatar/profile branding | Basic Google avatar import and channel identity | Partial; custom avatar/banner upload and extensive appearance controls absent |
-| Channel page | Video/Leaves/Stories/About views, name/description/links, stored subscriber counts | Local + UI present; channel Playlists tab is an explanatory state, not a public playlist listing |
+| Channel page | Video/Leaves/Stories/About views, name/description/links, stored subscriber counts | Local + UI present; public channel playlist discovery is not implemented |
 | Channel edit | Name/description and HTTPS links through server | Local; complete appearance flow not browser verified |
 | Featured video/trailer | No selection/editor | Absent |
 | Subscribe/unsubscribe | Database-backed subscription endpoints and controls | Subscribe/persistence count API verified; full browser/relogin workflow pending |
@@ -113,7 +113,7 @@ The currently reviewed automated suite contains 15 passing tests: two backend in
 | Accepted note display | Watch page displays accepted video notes | Partial; accepted Leaf/Story note display, author status/appeals and comprehensive note-report UI incomplete |
 | Cross-viewpoint/reputation | No mature diversity/reliability consensus algorithm | Absent; human review is a launch/operational dependency |
 | Confidential reports | Report table/queue, server-controlled moderator/admin role | Submission + unauthorised read/action denial API verified; staffing is not established by a table |
-| External legal notices | Anonymous CSRF-enabled copyright/illegal-content/child-safety endpoint | API present; easy-to-find public form/contact and monitored procedure remain launch work |
+| External legal notices | Anonymous CSRF-enabled copyright/illegal-content/child-safety endpoint | API and public /notices form implemented; anonymous submission/confidentiality API verified. Verified operator contacts and monitored procedure remain launch work |
 | Content removal/account sanctions | Moderator endpoints remove supported content/suspend users, record reason/audit | API present; broad authorised sanctions/restore tests incomplete |
 | Decision delivery | Audit records exist | Partial; complete affected-user statement-of-reasons delivery/status UI absent |
 | Appeals | Active users can submit own-content appeals into queue | Partial; suspension blocks account access; alternate verified appeal contact, independent decision/restore workflow absent |
@@ -134,7 +134,7 @@ The currently reviewed automated suite contains 15 passing tests: two backend in
 | Secrets | Environment example/ignore rules; server-only OAuth secrets | Source setup present; live secret management not configured |
 | Security headers/logging | Helmet/CSP and generic server errors | Code present; structured incident/access audit and production monitoring incomplete |
 | CI/production build | See actual final build/CI files and test report | Do not infer deployed CI success from local scripts |
-| Private EuroLoot repository | Created private under requested owner according to owner-agent verification | Confirm URL/pushed release commit in final delivery; no public source publication authorised |
+| Private EuroLoot repository | Created private under EuroLoot-LTD; owner/visibility verified through GitHub CLI | Confirm URL/pushed release commit in final delivery; no public source publication authorised |
 | Remote host/database/storage | Existing connected cloud owners did not establish authorised EuroLoot environment | Blocked; unrelated projects left untouched |
 | Hosted Google/HTTPS/domain | No eligible deployment and credentials configured | Blocked; no verified live URL or redirect flow |
 | Costs/quotas | Current-provider research, assumptions and staged usage estimates documented | Estimates, not an activated free/paid infrastructure promise; no spending authorised |
