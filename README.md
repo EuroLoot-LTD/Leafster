@@ -1,6 +1,6 @@
 # Leafster
 
-An original video-sharing and public community platform for the EuroLoot project. This repository contains a **working, restricted local implementation**, not a completed public production service. Source remains private and proprietary.
+An original video-sharing and public community platform for the EuroLoot project. This repository contains a **working, restricted local implementation**, not a completed public production service. Project rights and third-party licences are recorded in the repository.
 
 ## Run it
 
@@ -36,7 +36,7 @@ The implementation is a single-host pilot using React, TypeScript, Express, SQLi
 
 Production builds and isolated API/security tests pass. Browser QA exercised actual local screens and decoded media playback; the detailed report distinguishes API upload testing from the browser extension's blocked file picker.
 
-The private repository is [EuroLoot-LTD/Leafster](https://github.com/EuroLoot-LTD/Leafster). Member content, discovery, channels, search, media and community features require an approved completed account; privacy/terms/safety and confidential reporting remain public. No hosted deployment is claimed. The visible cloud accounts were unrelated to EuroLoot and were not changed. Live Google sign-in requires project credentials. Google Cloud access is currently blocked by the account owner’s verification challenge. Public registration stays closed pending age-assurance, legal, security and moderation readiness. No paid service, domain, payment collection or public source release was enabled.
+The private repository is [EuroLoot-LTD/Leafster](https://github.com/EuroLoot-LTD/Leafster). Public video discovery, search, creator video profiles and playback are available without signing in. Publishing, interactions, Leaves, Stories and personal tools require an approved completed account; privacy/terms/safety and confidential reporting remain public. No hosted deployment is claimed. The visible cloud accounts were unrelated to EuroLoot and were not changed. Live Google sign-in requires project credentials. Google Cloud access is currently blocked by the account owner’s verification challenge. Public registration stays closed pending age-assurance, legal, security and moderation readiness. No paid service, domain, payment collection or public source release was enabled.
 
 ## Read before operating
 
@@ -60,3 +60,5 @@ Leafster · A EuroLoot project. This attribution makes no claim about incorporat
 ## GitHub Pages build
 
 Run `npm run build:pages` to prepare static assets in `dist-pages/`, with the correct `/Leafster/` project base and hash routes. It intentionally reports that the application server is not connected; it is not a working Google login or video backend. See [Pages readiness](docs/PAGES-READINESS.md). The compiled-assets-only `gh-pages` branch was pushed to the private EuroLoot repository. GitHub rejected activation with HTTP422 because this private organisation repository is on the Free plan. No visibility or paid-plan change was made.
+
+The interface defaults to 150% site magnification at 100% browser zoom. Responsive breakpoints and viewport height limits account for that scale. Browser zoom remains separately adjustable.

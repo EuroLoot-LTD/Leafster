@@ -129,7 +129,7 @@ test("media ownership, range serving and visibility changes use private no-store
     b = await f.login("viewer"),
     v = f.video(a.channelId, "private");
   await b.agent.get(`/api/videos/${v.id}`).expect(404);
-  await request(f.app).get(`/api/media/${v.id}/video`).expect(401);
+  await request(f.app).get(`/api/media/${v.id}/video`).expect(404);
   assert.match(
     (await a.agent.get(`/api/media/${v.id}/video`).expect(200)).headers[
       "cache-control"

@@ -92,7 +92,7 @@ test("real local video pipeline, authorisation, social persistence and account l
   assert.ok(watched.playbackUrl);
   const search = await b.get("/api/videos?q=Original&sort=oldest").expect(200);
   assert.equal(search.body.videos.length, 1);
-  await anon.get(watched.playbackUrl).expect(401);
+  await anon.get(watched.playbackUrl).set("range", "bytes=0-63").expect(206).expect("Content-Type",/video\/mp4/);
   await b
     .get(watched.playbackUrl)
     .set("range", "bytes=0-63")

@@ -405,8 +405,8 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
     maxBytes: 500 * 1024 * 1024,
     maxUploadBytes: 100 * 1024 * 1024,
   });
-  // Browsing and media require an approved, completed profile. Legal notices
-  // remain available to non-account holders through their anonymous CSRF session.
+  // Public video browsing and playback are available without an account.
+  // Community publishing, social feeds and personal tools require a completed profile.
   const publicApiPaths = new Set([
     "/api/health",
     "/api/session",
@@ -418,10 +418,19 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
     // The handler exists only inside an explicitly isolated test process.
     "/api/test/login",
   ]);
+  const publicVideoReadPaths = [
+    /^\/api\/videos\/?$/i,
+    /^\/api\/videos\/[^/]+\/?$/i,
+    /^\/api\/media\/[^/]+\/(?:video|thumbnail)\/?$/i,
+    /^\/api\/channels\/[^/]+\/?$/i,
+  ];
   app.use((req: any, _res, next) => {
+    const publicVideoRead =
+      (req.method === "GET" || req.method === "HEAD") &&
+      publicVideoReadPaths.some(pattern => pattern.test(req.path));
     if (
       !req.path.toLowerCase().startsWith("/api/") ||
-      publicApiPaths.has(req.path)
+      publicApiPaths.has(req.path) || publicVideoRead
     )
       return next();
     try {
@@ -1260,10 +1269,10 @@ export function createApp(options: { dataDir?: string; origin?: string } = {}) {
           ),
         },
         videos: listVideos({ ...req, query: {} }, " AND c.id=?", [c.id]),
-        leaves: all(
+        leaves: req.user?.handle && req.user?.adult_confirmed_at ? all(
           "SELECT * FROM leaves WHERE user_id=? AND status='visible' AND parent_id IS NULL ORDER BY created_at DESC LIMIT 50",
           c.user_id,
-        ).map((l) => leafShape(l, req)),
+        ).map((l) => leafShape(l, req)) : [],
       });
     }),
   );

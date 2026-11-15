@@ -98,7 +98,7 @@ test("liked, subscriptions, trending and Fresh Finds apply real distinct eligibi
     await b.get("/api/videos?feed=liked").expect(200)
   ).body.videos.map((v: any) => v.id);
   assert.deepEqual(new Set(liked), new Set([newer, unlisted, privateOwn]));
-  await anon.get("/api/videos?feed=liked").expect(401);
+  assert.deepEqual((await anon.get("/api/videos?feed=liked").expect(200)).body.videos,[]);
   await b
     .post(`/api/channels/${ua.channel}/subscribe`)
     .set("x-csrf-token", ub.csrf)
@@ -108,7 +108,7 @@ test("liked, subscriptions, trending and Fresh Finds apply real distinct eligibi
     await b.get("/api/videos?feed=subscriptions").expect(200)
   ).body.videos.map((v: any) => v.id);
   assert.deepEqual(new Set(subscriptions), new Set([older, newer]));
-  await anon.get("/api/videos?feed=subscriptions").expect(401);
+  assert.deepEqual((await anon.get("/api/videos?feed=subscriptions").expect(200)).body.videos,[]);
   const fresh = (await b.get("/api/videos?feed=fresh").expect(200)).body;
   assert.deepEqual(
     fresh.videos.map((v: any) => v.id),

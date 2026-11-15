@@ -56,3 +56,9 @@ The latest complete suite passed **20/20 tests** after enforcing sign-in for con
 Both the full-stack production build and static Pages build passed. Browser checks verified the signed-out gate and disabled search, then the actual member interface with isolated fixture identity. Computed styles reported avatar radius `0px` and **zero rounded DOM elements**. [Latest square interface](screenshots/classic-square-interface.jpg). The Pages build was tested at `/Leafster/` with hash-route policy navigation and reload. It truthfully reports no application server and does not simulate a session or Google authentication.
 
 The private compiled-only gh-pages branch was pushed. An authorised Pages activation request was rejected with HTTP422: “Your current plan does not support GitHub Pages for this repository.” No paid upgrade or repository visibility change followed. Live Google authentication is blocked by the account owner’s Google verification challenge; no attempt was made to bypass it.
+
+## Latest revision: 150% default and anonymous watching
+
+The 20-test suite passed under the updated public-viewing policy. A genuinely transcoded H.264 clip was also played while signed out in the browser (readyState4, duration18seconds, paused=false, no media error). Like opened the sign-in dialog. Private media, publishing, community feeds and personal tools remain protected.
+
+Root CSS zoom is1.5. At a1280px browser viewport, the header measured75px and the sidebar300px, with no document overflow. Responsive breakpoints and JavaScript navigation checks were scaled consistently; viewport-height limits were divided by1.5. Narrow390px checks found no horizontal overflow after wrapping the feed controls. Both application and Pages builds passed. The static public-video screen no longer asks visitors to sign in to watch, and clearly states that the hosted video service still needs to be connected.

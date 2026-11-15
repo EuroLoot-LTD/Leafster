@@ -152,3 +152,7 @@ SQLite/private disk and one process are an intentional working pilot architectur
 ## Latest owner-requested revision
 
 All interface corners and profile images are square; browser DOM inspection found zero elements with a nonzero corner radius. Lucide was removed in favour of explicitly licensed 2016 filled icons. Search and community/content routes are unavailable until approved sign-in/profile completion, with server-side enforcement for direct media and case variants. Google Cloud is blocked by the owner’s verification challenge. Static Pages assets were prepared and pushed to a private gh-pages branch; activation was rejected by GitHub’s plan check, HTTP422. There is no verified live Pages URL.
+
+## Current access and display update
+
+Public videos, discovery/search, thumbnails and video profiles allow signed-out viewing. Video/channel read exceptions do not allow account mutations or expose private media; channel Leaves remain excluded for guests. Publishing, social features and personal tools retain approved-account requirements. The UI defaults to150% magnification with square corners preserved. GitHub Pages now serves the static site after the owner made the repository public; the hosted video/API service is still unconnected.

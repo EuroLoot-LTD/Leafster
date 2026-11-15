@@ -313,13 +313,17 @@ export default function App() {
     [accountOpen, setAccountOpen] = useState(false),
     [notifications, setNotifications] = useState(false);
   const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 800px)").matches,
+    () => window.matchMedia("(max-width: 1200px)").matches,
   );
   const token = useRef("");
   const location = useLocation(),
     navigate = useNavigate();
+  const publicVideoRoute =
+    location.pathname === "/" ||
+    /^\/(?:trending|search)\/?$/.test(location.pathname) ||
+    /^\/(?:watch|channel)\/[^/]+\/?$/.test(location.pathname);
   useEffect(() => {
-    const query = window.matchMedia("(max-width: 800px)");
+    const query = window.matchMedia("(max-width: 1200px)");
     const change = () => {
       setIsMobile(query.matches);
       setMobileNav(false);
@@ -585,11 +589,11 @@ export default function App() {
                   to={path}
                   end={path === "/"}
                   className={({ isActive }) =>
-                    `nav-item ${isActive ? "active" : ""} ${!session.user && path !== "/" ? "auth-locked" : ""}`
+                    `nav-item ${isActive ? "active" : ""} ${!session.user && !["/", "/trending"].includes(path) ? "auth-locked" : ""}`
                   }
                   title={collapsed ? label : undefined}
                   onClick={(e) => {
-                    if (!session.user && path !== "/") {
+                    if (!session.user && !["/", "/trending"].includes(path)) {
                       e.preventDefault();
                       setSignIn(true);
                     }
@@ -611,14 +615,18 @@ export default function App() {
         {!sessionLoaded ? (
           <Loading />
         ) : !session.user &&
+          !publicVideoRoute &&
           !location.pathname.startsWith("/policies/") &&
           location.pathname !== "/notices" ? (
           <SignInGate />
         ) : session.user &&
           !session.user.onboarded &&
+          !publicVideoRoute &&
           !location.pathname.startsWith("/policies/") &&
           !["/notices", "/onboarding"].includes(location.pathname) ? (
           <ProfileGate />
+        ) : staticPages && publicVideoRoute ? (
+          <PublicVideoServiceState />
         ) : (
           <Routes>
             <Route path="/" element={<Feed />} />
@@ -734,6 +742,29 @@ export default function App() {
   );
 }
 
+function PublicVideoServiceState() {
+  return (
+    <div className="feed-page">
+      <nav className="discovery-nav" aria-label="Discovery">
+        <NavLink to="/" end>
+          Home
+        </NavLink>
+        <NavLink to="/trending">Trending</NavLink>
+      </nav>
+      <div className="feed-board">
+        <section className="plain-feed-empty">
+          <h1>Videos</h1>
+          <p>Public videos can be watched without an account.</p>
+          <p>
+            The video service is not connected to this website yet. Videos will
+            appear here once the application server is online.
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function SignInGate() {
   const { signIn } = useApp();
   return (
@@ -741,9 +772,7 @@ function SignInGate() {
       <div className="feed-board signed-out-board">
         <section className="plain-feed-empty">
           <h1>Sign in to Leafster</h1>
-          <p>
-            Sign in to watch videos, explore channels, and join the community.
-          </p>
+          <p>Sign in to upload videos, post Leaves, and manage your library.</p>
           <button className="button primary" onClick={signIn}>
             Sign in
           </button>
@@ -782,10 +811,10 @@ function SearchBar() {
   const [value, setValue] = useState(""),
     [suggest, setSuggest] = useState<string[]>([]);
   const navigate = useNavigate();
-  const { api, session, signIn } = useApp();
+  const { api } = useApp();
   useEffect(() => {
     setSuggest([]);
-    if (!session.user || value.trim().length < 2) return;
+    if (staticPages || value.trim().length < 2) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       api(`/api/videos?q=${encodeURIComponent(value)}`, {
@@ -801,12 +830,9 @@ function SearchBar() {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [value, api, session.user]);
+  }, [value, api]);
   const submit = (text = value) => {
-    if (!session.user) {
-      signIn();
-      return;
-    }
+    if (staticPages) return;
     if (!text.trim()) return;
     navigate(`/search?q=${encodeURIComponent(text.trim())}`);
     setSuggest([]);
@@ -823,10 +849,11 @@ function SearchBar() {
       <div className="search-input-wrap">
         <input
           aria-label="Search Leafster"
-          placeholder={
-            session.user ? "Search videos and creators" : "Sign in to search"
+          placeholder="Search videos and creators"
+          title={
+            staticPages ? "The video service is not connected yet" : undefined
           }
-          disabled={!session.user}
+          disabled={staticPages}
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -861,7 +888,7 @@ function SearchBar() {
       <button
         aria-label="Search"
         className="search-submit"
-        disabled={!session.user}
+        disabled={staticPages}
       >
         <Search size={20} />
       </button>
